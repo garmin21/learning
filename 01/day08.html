@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+</head>
+<script src="https://cdn.bootcss.com/react/16.10.2/umd/react.development.js"></script>
+<script src="https://cdn.bootcss.com/react-dom/16.10.1/umd/react-dom.production.min.js"></script>
+<script src="https://cdn.bootcss.com/babel-standalone/7.0.0-beta.3/babel.min.js"></script>
+
+<body>
+
+	<div id="app"></div>
+
+
+
+
+	<script type="text/babel">
+		class Person extends React.Component {
+
+            constructor(){
+							super()
+								console.log('组件初始化')
+								
+								this.state = {
+									msg : '你好'
+								}
+            }
+
+            componentWillMount(){
+                console.log('组件将要被挂载')
+            }
+
+
+           
+
+            render() {
+                let i = 0
+                console.log(`第${i++}次渲染虚拟dom`)
+								return <div>组件 
+									<p>{this.state.msg}</p>
+									<button onClick={() => this.setState({msg:'hello'})}>点击修改state</button>
+									</div>
+            }
+
+            componentDidMount(){
+                console.log('组件已经挂载到了页面')
+						}
+
+						componentWillReceiveProps(){
+							console.log('组件将要接收props')
+						}
+
+						componentDidUpdate(){
+							console.log('组件已经被重新渲染')
+							ReactDOM.unmountComponentAtNode(document.querySelector('#app'))
+						}
+
+						componentWillUnmount(){
+							console.log('组件被卸载了')
+						}
+        }
+
+        ReactDOM.render( < Person /> , document.querySelector('#app'))
+    </script>
+
+</body>
+
+</html>

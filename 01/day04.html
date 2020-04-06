@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数组去重</title>
+</head>
+
+<body>
+    <script>
+        const arr = []
+
+        for (let i = 0; i < 100; i++) {
+            //    arr.push(Math.floor(Math.random() * i)) 
+            let tar = Math.floor(Math.random() * i)
+            arr.push(tar)
+        }
+        console.log(arr)
+
+        // 利用对象键不允许重复的特点
+        const obj = {}
+
+        for (let i = 0; i < arr.length; i++) {
+            const value = arr[i]
+            obj[value] = arr[i]
+        }
+
+        console.log(Object.values(obj))
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+</head>
+
+<body>
+	<!-- 自定义事件
+    类 events
+    on(eventName,fn) : 绑定持续性事件
+    off(eventName) : 解绑事件
+    noce(eventName,fn) : 绑定一次性事件
+		emit(eventName): 并发事件
+		{name : [cb,cb...],name:[cb,cb....]}
+    -->
+	<script>
+		class Events {
+
+			constructor() {
+				this.callbacks = {}
+			}
+
+			on(eventName, callBack) {
+				const arr = this.callbacks[eventName];
+				if (arr) {
+					// 存在
+					// 第二次绑定事件
+					this.callbacks[eventName].push(callBack)
+					return
+				}
+
+				// 第一次绑定事件
+				this.callbacks[eventName] = [callBack]
+			}
+			once(eventName, callBack) {
+				const cb = (value) => {
+					callBack(value)
+					// 执行完后，进行解绑
+					this.off(eventName, cb)
+				}
+				const arr = this.callbacks[eventName];
+				if (arr) {
+					// 存在
+					// 第二次绑定事件
+					this.callbacks[eventName].push(cb)
+					return
+				}
+
+				// 第一次绑定事件
+				this.callbacks[eventName] = [cb]
+			}
+			off(eventName, fn) {
+
+				// 有二个参数是个 fn ,并且有值，干掉指定的，fn ,没第二个参数，全部干掉
+				if (fn && typeof fn === 'function') {
+					// 干掉指定的fn
+					if (this.callbacks[eventName]) {
+						this.callbacks[eventName] = this.callbacks[eventName].filter(cb => cb !== fn);
+					}
+				} else {
+					// 全部干掉
+					if (this.callbacks[eventName]) {
+						name.length = 0
+					}
+				}
+
+			}
+			emit(eventName, value) {
+				const name = this.callbacks[eventName]
+				if (name) {
+					// 去触发回调
+					const callbs = this.callbacks[eventName]
+					callbs.forEach(cb => cb(value))
+				}
+			}
+		}
+
+
+		const event = new Events;
+
+		// event.on('hello', function (value) {
+		// 	console.log(value)
+		// })
+		event.once('word', hello)
+
+		function hello(value) {
+			console.log(value)
+		}
+		event.emit('word', 111)
+		event.emit('word', 111)
+	</script>
+</body>
+
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        const arr = [];
+
+        for (let i = 0; i < 100 ; i++) {
+            const number = Math.floor(Math.random() * i+2)
+            arr.push(number)            
+        }
+        // 有这么一个顺序颠倒的数组，将器排序
+
+        const mySlot = (arr) => {
+            if(arr.length <= 1) return arr
+            // 找基准值
+            // const len = arr.length;
+            const len = Math.floor(arr.length / 2) // 得到基准索引
+            const elem = arr.splice(len,1)[0] // 基准元素
+            
+
+            const leftArr = []
+            const rightArr = [];
+
+            for (let i = 0; i < arr.length; i++) {
+                if(arr[i] > elem){
+                    // 排序重新
+
+                    rightArr.push(arr[i])
+                }else{
+                    leftArr.push(arr[i])
+                }
+            }
+
+            const newLeftArr = mySlot(leftArr)
+            const newRightArr = mySlot(rightArr);
+
+            // 将其合并在一起的结构返回，递归
+            return newLeftArr.concat([elem],newRightArr)
+
+        }
+
+        const newArr = mySlot(arr)
+
+        console.log(newArr)
+
+    
+
+
+
+    </script>
+</body>
+</html>

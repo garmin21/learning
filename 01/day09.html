@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+
+<body>
+
+	<div id="app">
+		<p>{{ msg }}</p>
+		<!-- <app-button @click.native="good"  /> -->
+		<app-button @fuc="good"  />
+	</div>
+
+
+	<script>
+		Vue.component('app-button', {
+			template: '<button @click="$emit(fuc,hhhh)">按钮</button>'
+		});
+
+		new Vue({
+			el: '#app',
+			data: {
+				msg: '123'
+			},
+			methods: {
+				good(val) {
+					console.log(val)
+					this.msg = '456'
+				}
+			}
+		})
+	</script>
+</body>
+
+</html>

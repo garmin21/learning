@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>手写promise</title>
+</head>
+
+<body>
+    <script>
+        const PENDING = 'pending';
+        const RESLOVED = 'resloved';
+        const REJECTED = 'rejected'
+        // 1. 搭建promise的基础部件
+        function MyPromise(actuator) {
+            this.state = PENDING; // 定义状态
+            this.value = undefined; // 定义默认值
+            this.callBacks = {}; // 定义对调函数的存储结构
+            const self = this; // 缓存this
+
+            try {
+                actuator(reslove, reject);
+            } catch (err) {
+                reject(err)
+            }
+
+            function reslove(value) {
+                if (self.state === PENDING) {
+                    self.state = RESLOVED;
+                    self.value = value;
+                    if (self.callBacks.onReslove) {
+                        setTimeout(() => {
+                            self.callBacks.onReslove(value)
+                        }, 0)
+                    }
+                }
+            }
+
+            function reject(parameter) {
+                if (self.state === REJECTED) {
+                    self.state = REJECTED;
+                    self.value = parameter;
+                    if (self.callBacks.onReject) {
+                        setTimeout(() => {
+                            self.callBacks.onReject(parameter)
+                        }, 0)
+                    }
+                }
+            }
+        }
+        // 重点：完成 then 方法的链式调用
+        // 1. 必须返回的是一个 promise 实列
+        // 第二个 then 方法的调用看的是上一个 then 执行的返回值
+        //  1. 如果，return 是一个 原始值，就调用 成功的 函数
+        //  2. 如果，return 是一个 promise 实例， 就需要看此时 promsie 的状态
+        //  3. 如果，抛出异常的话，就调用失败的函数
+        MyPromise.prototype.then = function (onReslove, onReject) {
+            let mypromise = {};
+            // 两个回调函数的执行看的是 promise 实现的状态
+            const self = this;
+            if (self.state === RESLOVED) {
+                // 成功
+                mypromise = new MyPromise((reslove, reject) => {
+                    try {
+                        const result = onReslove(self.value)
+                        console.log(self.value)
+                        if (result instanceof MyPromise) {
+                            result.then(reslove, reject)
+                        } else {
+                            reslove(result)
+                        }
+                    } catch (err) {
+                        reject(err)
+                    }
+                })
+            } else if (self.state === REJECTED) {
+                // 失败
+                mypromise = new MyPromise((reslove, reject) => {
+                    try {
+                        const result = onReject(self.value)
+                        if (result instanceof MyPromise) {
+                            result.then(reslove, reject)
+                        } else {
+                            reslove(result)
+                        }
+                    } catch (err) {
+                        reject(err)
+                    }
+                })
+            } else if (self.state === PENDING) {
+                // 默认
+                mypromise = new MyPromise((reslove, reject) => {
+                    self.callBacks.onReslove = function () {
+                        try {
+                            const result = onReslove(self.value)
+                            if (result instanceof MyPromise) {
+                                result.then(reslove, reject)
+                            } else {
+                                reslove(result)
+                            }
+                        } catch (err) {
+                            reject(err)
+                        }
+                    };
+                    self.callBacks.onReject = function () {
+                        try {
+                            const result = onReject(self.value)
+                            if (result instanceof MyPromise) {
+                                result.then(reslove, reject)
+                            } else {
+                                reslove(result)
+                            }
+                        } catch (err) {
+                            reject(err)
+                        }
+                    };
+                })
+
+            }
+
+            return mypromise;
+        }
+
+
+        const p = new MyPromise((reslove, reject) => {
+            setTimeout(() => {
+                reslove(222)
+            }, 1000)
+        })
+
+        p.then((val) => {
+            console.log(val)
+            return 111
+        }, (param) => {
+            console.log(param)
+        }).then((val) => {
+            console.log(val)
+        })
+    </script>
+</body>
+
+</html>

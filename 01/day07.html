@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>实现数组的部分方法</title>
+</head>
+
+<body>
+	<script>
+		// 数组的map方法
+
+		Array.prototype.myMap = function (callback) {
+			const arr = []
+			for (let i = 0; i < this.length; i++) {
+				arr.push(callback(this[i], i))
+			}
+			return arr
+		}
+		//自己的
+		console.log([1, 2, 3, 4].myMap((item, index) => item + index))
+		// 原生的
+		console.log([1, 2, 3, 4].map((item, index) => {
+			return item + index
+		}))
+	</script>
+
+	<script>
+		// 数组的forEach方法
+		Array.prototype.myForEach = function (callback) {
+			for (let i = 0; i < this.length; i++) {
+
+				callback(this[i], i)
+			}
+			// 函数默认什么都不返回，默认就是undefined 
+			return null
+		}
+
+		// 自己的
+		console.log([1, 2, 3, 4, 5].myForEach((item, index) => console.log(item, index)))
+
+		// 原生
+		console.log([1, 2, 3, 4, 5].forEach((item, index) => console.log(item, index)))
+	</script>
+
+	<script>
+		// 数组的some方法
+		Array.prototype.mySome = function (callback) {
+			for (let i = 0; i < this.length; i++) {
+				if ((callback(this[i], i))) {
+					return true
+				}
+			}
+			return false
+		}
+
+		// 自己的
+		console.log([1, 2, 3, 4].mySome((item, index) => item > 4))
+
+		// 原生
+		console.log([1, 2, 3, 4].some((item, index) => item > 4))
+	</script>
+
+
+</body>
+
+</html>

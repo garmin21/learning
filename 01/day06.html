@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数组去重</title>
+</head>
+
+<body>
+    <script>
+        let arr = []
+
+        for (let i = 0; i < 100; i++) {
+            arr.push(Math.floor(Math.random() * 100))
+        }
+        console.log(arr)
+
+        // 1. 使用 对象的特点,键值不唯一，特点，效率特别快,并且自动排序
+
+        const obj = {}
+
+        for(let i = 0; i<arr.length; i++){
+            obj[arr[i]] = arr[i]
+        }
+        // console.log(obj)
+        console.log(Object.values(obj))
+
+        // 2. 使用ES6的 set, 特点:效率稍慢，不会自动排序
+        console.log([...new Set(arr)])
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>对象深拷贝</title>
+</head>
+
+<body>
+    <script>
+        const xiaoming = {
+            name: '小明',
+            age: 18,
+            sex: '男',
+            moom: {
+                noe: '长大想当飞行员',
+                tow: '想出人投地',
+                tree: '想辉煌腾达'
+            }
+        }
+
+        console.log(xiaoming)
+        // 需求是将这个对象拷贝一份，将器引用地址改变
+        // 1. 思路想法是： 我可以遍历这个对象，深度递归的方式，将其克隆一份新的数据
+
+        // const keys = Object.keys(xiaoming);
+        // const obj = {}
+        // keys.forEach(key => {
+        //     const value = xiaoming[key]
+        //     if (typeof value === 'object') {
+        //         // 说明是引用类型
+        //         // 需要知道是一个数组呢，还是一个对象
+        //         if (getVarType(value) === 'Object') {
+
+        //         } else if (getVarType(value) === 'Array') {
+
+        //         }
+        //     } else {
+        //         // 原始类型
+        //         obj[key] = value;
+        //     }
+        // })
+
+
+        // 定义一个检测对象类型的函数
+        const getVarType = (obj) => Object.prototype.toString.call(obj).slice(8, -1)
+
+        // 遇到问题：我不知道将来给我的一个对象，长什么样子，所以我就必须不断的去重复的遍历进行拷贝
+
+        function deepCopy(obj) {
+            let store;
+            if (getVarType(obj) === 'Array') {
+                store = [];
+            } else if (getVarType(obj) === 'Object') {
+                store = {}
+            } else {
+                // 既不是数组，也不是对象，原样返回
+                return obj
+            }
+            // 对传入的数组，或对象进行遍历
+            for (const key in obj) {
+                store[key] = deepCopy(obj[key]);
+            }
+
+            return store
+        }
+
+        const result = deepCopy(xiaoming);
+        result.name = '小红'
+        console.log(result)
+    </script>
+</body>
+
+</html>
